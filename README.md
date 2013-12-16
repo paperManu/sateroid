@@ -1,0 +1,2 @@
+# sateroid
+### a Sails application
