@@ -3,7 +3,8 @@ require.config({
   paths: {
     underscore: '/linker/js/libs/underscore-min',
     jqueryui: '/linker/js/libs/jquery-ui',
-    world : '/linker/js/world'
+    world: '/linker/js/world',
+    interface: '/linker/js/interface'
   },
   shim: {
     underscore: {
@@ -15,18 +16,16 @@ require.config({
   }
 });
 
-require(['jquery', 'jqueryui', 'world'],
+require(['jquery', 'jqueryui', 'world', 'interface'],
 
-  function(jquery, jqueryui, world) {
-    console.log("Init main");
+  function(jquery, jqueryui, world, interface) {
 
-     var socket = io.connect();
-     socket.on('connect', function socketConnected() {
+    var socket = io.connect()
 
-      socket.emit("test", "test ok");
-      });
-
-    //world.patate();
-    
+    if (window.document.URL.indexOf("world") >= 0) {
+      world.initialize();
+    } else {
+      interface.initialize();
+    }
   }
 );
