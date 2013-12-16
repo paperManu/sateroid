@@ -13,7 +13,11 @@ module.exports = {
   	/* e.g.
   	nickname: 'string'
   	*/
-    
+    nickname : {
+    	type : "string",
+    	required : true
+    },
+    score : "int"
   }
 
 };

@@ -5,6 +5,9 @@ define([], function(){
 		console.log("init interface");
 	}
 
+
+	
+
 	return {
 		initialize : initialize
 	}
