@@ -5,6 +5,9 @@ define(['three'], function(){
     socket.on("test", function(state) {
         console.log("prout");
     });
+    socket.on("test2", function(state) {
+        console.log("super");
+    });
     socket.emit("test");
 
     // THREE.js variables

@@ -10,6 +10,9 @@
 
 module.exports.bootstrap = function (cb) {
     var StateMachine = require("../assets/linker/js/libs/state-machine.min.js").StateMachine;
+    var THREE = require("three");
+    var Objects = require("../assets/linker/js/objects.js");
+    console.log(Objects);
 
 	//when we start the server we removed all players
 	Players.find().done(function(err, players) {
@@ -43,26 +46,34 @@ module.exports.bootstrap = function (cb) {
 					});
 				}
 			});
-
 		});
-	});
 
+        socket.on("test2", function(v) {
+            console.log("Acknowledged");
+        });
+	});
 
 	Players.find().done(function(err, players){
 		console.log(err, players);
 	});
 
-  // Scene graph main loop
-  function gameLoop() {
+    /*********/
+    var _world;
+    // Scene graph main loop
+    function gameLoop() {
+        _world.update();
+        setImmediate(gameLoop);
+    }
+
+    function initGame() {
+        _world = new Objects.World();
+        var player = new Objects.Player();
+    }
+
+    initGame();
     setImmediate(gameLoop);
-  }
 
-  function initGame() {
-  }
-
-  setImmediate(gameLoop);
-
-  // It's very important to trigger this callack method when you are finished 
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+    // It's very important to trigger this callack method when you are finished 
+    // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+    cb();
 };
