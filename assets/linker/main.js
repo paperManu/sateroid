@@ -20,7 +20,7 @@ require(['jquery', 'jqueryui', 'world', 'interface'],
 
   function(jquery, jqueryui, world, interface) {
 
-    var socket = io.connect()
+    window.socket = io.connect();
 
     if (window.document.URL.indexOf("world") >= 0) {
       world.initialize();
