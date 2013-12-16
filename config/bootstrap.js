@@ -24,7 +24,7 @@ module.exports.bootstrap = function (cb) {
 	});
 
 	sails.io.sockets.on('connection', function (socket) {
-        var ship = new Objects.Player();
+        var ship = new Objects.Ship();
         _world.add(ship);
 
 		socket.on("btn", function(nickname, btn, value ) {
@@ -70,7 +70,6 @@ module.exports.bootstrap = function (cb) {
 
     function initGame() {
         _world = new Objects.World();
-        var player = new Objects.Player();
     }
 
     initGame();
