@@ -9,11 +9,12 @@
  */
 
 module.exports.bootstrap = function (cb) {
+    var StateMachine = require("../assets/linker/js/libs/state-machine.min.js").StateMachine;
 
 	sails.io.sockets.on('connection', function (socket) {
-
 		socket.on("test", function(val) {
 			console.log(val);
+            socket.emit("test");
 		});
 	});
 
@@ -21,6 +22,16 @@ module.exports.bootstrap = function (cb) {
 	Players.find().done(function(err, players){
 		console.log(err, players);
 	});
+
+  // Scene graph main loop
+  function gameLoop() {
+    setImmediate(gameLoop);
+  }
+
+  function initGame() {
+  }
+
+  setImmediate(gameLoop);
 
   // It's very important to trigger this callack method when you are finished 
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
