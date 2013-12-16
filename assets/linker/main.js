@@ -3,6 +3,7 @@ require.config({
   paths: {
     underscore: '/linker/js/libs/underscore-min',
     jqueryui: '/linker/js/libs/jquery-ui',
+    three: '/linker/js/libs/three.min',
     world: '/linker/js/world',
     interface: '/linker/js/interface'
   },
@@ -24,6 +25,7 @@ require(['jquery', 'jqueryui', 'world', 'interface'],
 
     if (window.document.URL.indexOf("world") >= 0) {
       world.initialize();
+      world.renderLoop();
     } else {
       interface.initialize();
     }
