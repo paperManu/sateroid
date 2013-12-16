@@ -14,11 +14,38 @@ module.exports.bootstrap = function (cb) {
     var Objects = require("../assets/linker/js/objects.js");
     console.log(Objects);
 
-    /*********/
-    // Socket.io related
+	//when we start the server we removed all players
+	Players.find().done(function(err, players) {
+		_.each(players, function(player) {
+			Players.destroy({id : player.id}).done(function(err) {
+				if(err) console.log(err);
+			});
+		});
+	});
+
 	sails.io.sockets.on('connection', function (socket) {
-		socket.on("test", function(v) {
-            socket.emit("test");
+
+
+		socket.on("btn", function(nickname, btn, value ) {
+			console.log(nickname, btn, value);
+		});
+
+		socket.on("direction", function(nickname, x, y) {
+			console.log(nickname, x, y);
+		});
+
+		socket.on("disconnect", function() {
+			Players.findOne({socketId : socket.id}).done(function(err, player) {
+				if(!err && player) {
+					Players.destroy({socketId : socket.id}).done(function(err) {
+						if(err) {
+							console.log("error removed player", err);
+							return;
+						}
+						console.log("Player "+player.nickname+" is disconnect");
+					});
+				}
+			});
 		});
 
         socket.on("test2", function(v) {
