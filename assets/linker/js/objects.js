@@ -14,6 +14,8 @@ function World() {
     /*********/
     this.update = function() {
         var currentTick = (new Date).valueOf();
+        var delta = currentTick - lastTick;
+        lastTick = currentTick;
     }
 }
 
