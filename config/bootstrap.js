@@ -24,7 +24,8 @@ module.exports.bootstrap = function (cb) {
 	});
 
 	sails.io.sockets.on('connection', function (socket) {
-
+        var ship = new Objects.Ship();
+        _world.add(ship);
 
 		socket.on("btn", function(nickname, btn, value ) {
 			console.log(nickname, btn, value);
@@ -42,7 +43,9 @@ module.exports.bootstrap = function (cb) {
 							console.log("error removed player", err);
 							return;
 						}
-						console.log("Player "+player.nickname+" is disconnect");
+						console.log("Player "+player.nickname+" is disconnected");
+
+                        _world.remove(ship);
 					});
 				}
 			});
@@ -67,7 +70,6 @@ module.exports.bootstrap = function (cb) {
 
     function initGame() {
         _world = new Objects.World();
-        var player = new Objects.Player();
     }
 
     initGame();

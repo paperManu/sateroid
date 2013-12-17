@@ -14,6 +14,8 @@ function World() {
     /*********/
     this.update = function() {
         var currentTick = (new Date).valueOf();
+        var delta = currentTick - lastTick;
+        lastTick = currentTick;
     }
 }
 
@@ -50,12 +52,12 @@ Item.prototype = Object.create(THREE.Object3D.prototype);
 Item.prototype.constructor = Item;
 
 /*************/
-function Player() {
+function Ship() {
     Item.call(this);
 }
 
-Player.prototype = Object.create(Item.prototype);
-Player.prototype.constructor = Player;
+Ship.prototype = Object.create(Item.prototype);
+Ship.prototype.constructor = Ship;
 
 /*************/
 function Laser() {
@@ -75,6 +77,6 @@ Asteroid.prototype.constructor = Asteroid;
 
 /*************/
 exports.World = World;
-exports.Player = Player;
+exports.Ship = Ship;
 exports.Laser = Laser;
 exports.Asteroid = Asteroid;
