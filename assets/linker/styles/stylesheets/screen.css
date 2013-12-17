@@ -75,7 +75,6 @@ body, html, .container {
   display: table;
   height: 100%;
   width: 100%;
-  display: none;
 }
 /* line 19, ../sass/screen.sass */
 #control .part {
@@ -104,15 +103,14 @@ body, html, .container {
 }
 /* line 37, ../sass/screen.sass */
 #control .btn {
-  width: 100px;
-  height: 100px;
-  -webkit-border-radius: 50px;
-  -moz-border-radius: 50px;
-  -ms-border-radius: 50px;
-  -o-border-radius: 50px;
-  border-radius: 50px;
+  width: 40%;
+  height: 40%;
+  -webkit-border-radius: 5000px;
+  -moz-border-radius: 5000px;
+  -ms-border-radius: 5000px;
+  -o-border-radius: 5000px;
+  border-radius: 5000px;
   background: #333333;
-  margin: 0 0 0 15px;
   color: #999999;
   font-size: 60px;
   font-family: helvetica;
