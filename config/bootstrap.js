@@ -24,15 +24,21 @@ module.exports.bootstrap = function (cb) {
 	});
 
 	sails.io.sockets.on('connection', function (socket) {
-        var ship = new Objects.Ship();
-        _world.add(ship);
-
+        var ship;
+        
 		socket.on("btn", function(nickname, btn, value ) {
 			console.log(nickname, btn, value);
 		});
 
+        socket.on("logged", function(nickname) {
+            ship = new Objects.Ship();
+            ship.name = nickname;
+            _world.add(ship);
+        });
+
 		socket.on("direction", function(nickname, x, y) {
 			console.log(nickname, x, y);
+            ship.rotate(x);
 		});
 
 		socket.on("disconnect", function() {
@@ -51,8 +57,9 @@ module.exports.bootstrap = function (cb) {
 			});
 		});
 
-        socket.on("test2", function(v) {
-            console.log("Acknowledged");
+        socket.on("update", function() {
+            var graph = _world.getState();
+            socket.emit("graph", graph);
         });
 	});
 

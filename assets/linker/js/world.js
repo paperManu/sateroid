@@ -1,19 +1,19 @@
 define(['three'], function(){
 	'use strict';
 
+    /*********/
+    // Socket.io messages
     var socket = io.connect();
-    socket.on("test", function(state) {
-        console.log("prout");
+    socket.on("graph", function(graph) {
+        console.log(graph);
     });
-    socket.on("test2", function(state) {
-        console.log("super");
-    });
-    socket.emit("test");
 
+    /*********/
     // THREE.js variables
     var _scene, _camera;
     var _renderer;
 
+    /*********/
 	function initialize() {
 	    console.log("init world");
         _scene = new THREE.Scene();
@@ -31,11 +31,16 @@ define(['three'], function(){
         _camera.position.z = 5;
 	}
 
+    /*********/
     function renderLoop() {
         requestAnimationFrame(renderLoop);
+        // Get the current state from the server
+        socket.emit("update");
+        // Render the scene
         _renderer.render(_scene, _camera);
     }
 
+    /*********/
 	return {
 		initialize : initialize,
         renderLoop : renderLoop

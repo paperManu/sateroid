@@ -14,9 +14,11 @@ define([], function(){
 					alert(data.err);
 					return;
 				}
-			player = data.player;
-			$("#connexion").remove();
-			$("#control").css('display', 'table');
+			    player = data.player;
+			    $("#connexion").remove();
+			    $("#control").css('display', 'table');
+
+                socket.emit("logged", player.nickname);
 			});
 		});
 
