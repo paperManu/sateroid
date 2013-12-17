@@ -16,30 +16,99 @@ define(['audio'], function(){
     }
     init();
     
-    var synthNote = function (type, freq) {
-        var now = context.currentTime;
+    var LaserCarrier = function() {
+	var now = context.currentTime;
         // carrier
         this.carrier = context.createOscillator();
-        this.carrier.type = type;
+	this.gain = context.createGain();
+        this.carrier.type = "sawtooth";
         //this.carrier.frequency.value = freq;
-        this.carrier.connect(context.destination);
-        //this.carrier.frequency.cancelScheduledValues(now);
-        this.carrier.frequency.setValueAtTime(freq, now);
-        this.carrier.frequency.exponentialRampToValueAtTime(0.0, now + 0.1);
-        //this.carrier.frequency.linearRampToValueAtTime(0.0, now + 0.2);
-        // if (this.carrier.frequency < 20) {
-        //     this.carrier.stop(0);
-        // }
+        this.carrier.connect(this.gain);
+	this.gain.connect(context.destination);
+	this.gain.value = 0.25;
+        this.carrier.frequency.cancelScheduledValues(now);
+        this.carrier.frequency.setValueAtTime(17000, now);
+        this.carrier.frequency.linearRampToValueAtTime(10.0, now + 5.2);
+        // this.carrier.frequency.linearRampToValueAtTime(0.0, now + 0.2);
+	
+	this.carrier2 = context.createOscillator();
+	this.gain2 = context.createGain();
+        this.carrier2.type = "sawtooth";
+        //this.carrier.frequency.value = freq;
+        this.carrier2.connect(this.gain);
+	this.gain2.value = 0.25
+        this.carrier2.frequency.cancelScheduledValues(now);
+        this.carrier2.frequency.setValueAtTime(3600, now);
+        this.carrier2.frequency.exponentialRampToValueAtTime(10.0, now + 10.17);
+        // this.carrier.frequency.linearRampToValueAtTime(0.0, now + 0.2);
     }
 
-    synthNote.prototype.start = function (time) {
+    var Laser = function () {
+
+	var now = context.currentTime;
+        // carrier 1
+        this.carrier = context.createOscillator();
+	this.gain = context.createGain();
+        this.carrier.type = "sawtooth";
+        //this.carrier.frequency.value = freq;
+        this.carrier.connect(this.gain);
+	this.gain.value = 0.025;
+        this.carrier.frequency.cancelScheduledValues(now);
+        this.carrier.frequency.setValueAtTime(1800, now);
+        this.carrier.frequency.linearRampToValueAtTime(10.0, now + 0.2);
+
+	// carrier 2
+	
+	this.carrier2 = context.createOscillator();
+	this.gain2 = context.createGain();
+        this.carrier2.type = "sawtooth";
+        //this.carrier.frequency.value = freq;
+        this.carrier2.connect(this.gain2);
+	this.gain2.value = 0.25;
+        this.carrier2.frequency.cancelScheduledValues(now);
+        this.carrier2.frequency.setValueAtTime(1300, now);
+        this.carrier2.frequency.linearRampToValueAtTime(10.0, now + 0.37);
+	
+	// LP filter
+
+	this.lp = context.createBiquadFilter();
+	this.lp.type = 0;
+	this.lp.frequency.value = 18000;
+	this.gain.connect(this.lp);
+	this.gain2.connect(this.lp);
+	
+	// HP filter
+
+	this.hp = context.createBiquadFilter();
+	this.hp.type = 1;
+	this.hp.frequency.value = 380;
+	this.lp.connect(this.hp);
+	this.hp.connect(context.destination);
+
+
+        // var now = context.currentTime;
+        // // carrier
+        // this.carrier = context.createOscillator();
+        // this.carrier.type = "sawtooth";
+        // //this.carrier.frequency.value = freq;
+        // this.carrier.connect(context.destination);
+        // //this.carrier.frequency.cancelScheduledValues(now);
+        // this.carrier.frequency.setValueAtTime(17000, now);
+        // this.carrier.frequency.exponentialRampToValueAtTime(10.0, now + 0.1);
+        // // this.carrier.frequency.linearRampToValueAtTime(0.0, now + 0.2);
+    }
+
+
+    Laser.prototype.start = function (time) {
         this.carrier.start(time);
+        this.carrier2.start(time);
         //this.ramp.start(time);
         //this.width.start(time);
     }
     
-    synthNote.prototype.stop = function (time) {
+    Laser.prototype.stop = function (time) {
         this.carrier.stop(time);
+        this.carrier2.stop(time);
         //this.ramp.stop(time);
         //this.width.stop(time);
     }
@@ -47,14 +116,14 @@ define(['audio'], function(){
     var note;
     $(document).keydown(function(e){
         console.log("Key " + e.keyCode);
-        if (e.keyCode == 18) {
-            note = new synthNote("sawtooth", Math.floor(Math.random() * 1000 + 5000));
+        if (e.keyCode == 17) {
+            note = new Laser();
             note.start(0);
         }
         
     });
     $(document).keyup(function(e){
-        if (e.keyCode == 32) {
+        if (e.keyCode == 17) {
             note.stop(0);
         }
     });
