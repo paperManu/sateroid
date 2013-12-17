@@ -1,4 +1,4 @@
-define(['three'], function(){
+define(['three', 'audio'], function(){
 	'use strict';
 
     var socket = io.connect();
