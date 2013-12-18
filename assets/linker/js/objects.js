@@ -12,6 +12,22 @@ function World() {
     }
 
     /*********/
+    this.getState = function() {
+        var graph = [];
+
+        for (child in this.children) {
+            var obj = {
+                name: this.children[child].name,
+                position: this.children[child].position,
+                rotation: this.children[child].rotation
+            };
+            graph.push(obj);
+        }
+
+        return graph;
+    }
+
+    /*********/
     this.update = function() {
         var currentTick = (new Date).valueOf();
         var delta = currentTick - lastTick;
@@ -40,7 +56,9 @@ function Item() {
     }
 
     /*********/
-    this.rotate = function(angles) {
+    this.rotate = function(angle) {
+        this.rotateOnAxis(new THREE.Vector3(1, 0, 0), angle);
+        console.log(this.rotation);
     }
 
     /*********/
