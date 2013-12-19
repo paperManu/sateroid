@@ -2,33 +2,47 @@ define(['three', 'audio', 'objects'], function(){
 	'use strict';
 
     /*********/
+    // THREE.js variables
+    var _scene, _camera, _world;
+    var _renderer;
+
+    /*********/
     // Socket.io messages
     var socket = io.connect();
     socket.on("graph", function(graph) {
+        _world.setState(graph);
         //console.log(graph);
     });
 
-    /*********/
-    // THREE.js variables
-    var _scene, _camera;
-    var _renderer;
+    socket.on("addObject", function(object) {
+        var objectType = Objects[object[0]];
+        if (objectType === undefined)
+            return;
+
+        var instance = new objectType();
+        instance.name = object[1];
+        _world.addObject(instance);
+    });
 
     /*********/
 	function initialize() {
 	    console.log("init world");
         _scene = new THREE.Scene();
         _camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        _camera.position.z = 5;
 
         _renderer = new THREE.WebGLRenderer();
         _renderer.setSize(window.innerWidth, window.innerHeight);
-        //document.getElementById("world").appendChild(_renderer.domElement);
         document.body.appendChild(_renderer.domElement);
 
-        var geometry = new THREE.CubeGeometry(1, 1, 1);
-        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        var cube = new THREE.Mesh(geometry, material);
-        _scene.add(cube);
-        _camera.position.z = 5;
+        //var geometry = new THREE.CubeGeometry(1, 1, 1);
+        //var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        //var cube = new THREE.Mesh(geometry, material);
+        //_scene.add(cube);
+
+        _world = new Objects.World();
+        _scene.add(_world);
+        socket.emit("registerViewer");
 	}
 
     /*********/

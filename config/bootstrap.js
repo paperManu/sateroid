@@ -11,7 +11,8 @@
 module.exports.bootstrap = function (cb) {
     var StateMachine = require("../assets/linker/js/libs/state-machine.min.js").StateMachine;
     var Objects = require("../assets/linker/js/objects.js");
-    console.log(Objects);
+
+    var _world;
 
 	//when we start the server we removed all players
 	Players.find().done(function(err, players) {
@@ -32,7 +33,7 @@ module.exports.bootstrap = function (cb) {
         socket.on("logged", function(nickname) {
             ship = new Objects.Ship();
             ship.name = nickname;
-            _world.add(ship);
+            _world.addObject(ship);
         });
 
 		socket.on("direction", function(nickname, x, y) {
@@ -56,6 +57,10 @@ module.exports.bootstrap = function (cb) {
 			});
 		});
 
+        socket.on("registerViewer", function() {
+            _world.addSocket(socket);
+        });
+
         socket.on("update", function() {
             var graph = _world.getState();
             socket.emit("graph", graph);
@@ -67,7 +72,6 @@ module.exports.bootstrap = function (cb) {
 	});
 
     /*********/
-    var _world;
     // Scene graph main loop
     function gameLoop() {
         _world.update();
