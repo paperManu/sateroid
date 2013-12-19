@@ -10,7 +10,6 @@
 
 module.exports.bootstrap = function (cb) {
     var StateMachine = require("../assets/linker/js/libs/state-machine.min.js").StateMachine;
-    var THREE = require("three");
     var Objects = require("../assets/linker/js/objects.js");
     console.log(Objects);
 

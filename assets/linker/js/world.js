@@ -1,11 +1,11 @@
-define(['three', 'audio'], function(){
+define(['three', 'audio', 'objects'], function(){
 	'use strict';
 
     /*********/
     // Socket.io messages
     var socket = io.connect();
     socket.on("graph", function(graph) {
-        console.log(graph);
+        //console.log(graph);
     });
 
     /*********/

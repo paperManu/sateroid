@@ -1,4 +1,5 @@
-var THREE = require("three");
+if (typeof window === 'undefined')
+    var THREE = require("three");
 
 /*************/
 function World() {
@@ -94,7 +95,15 @@ Asteroid.prototype = Object.create(Item.prototype);
 Asteroid.prototype.constructor = Asteroid;
 
 /*************/
-exports.World = World;
-exports.Ship = Ship;
-exports.Laser = Laser;
-exports.Asteroid = Asteroid;
+if (typeof window === 'undefined') {
+    exports.World = World;
+    exports.Ship = Ship;
+    exports.Laser = Laser;
+    exports.Asteroid = Asteroid;
+}
+else {
+    define(World);
+    define(Ship);
+    define(Laser);
+    define(Asteroid);
+}

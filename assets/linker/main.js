@@ -6,6 +6,7 @@ require.config({
         three: '/linker/js/libs/three.min',
         world: '/linker/js/world',
         audio: "/linker/js/audio",
+        objects: "/linker/js/objects",
         interface: '/linker/js/interface'
     },
     shim: {
@@ -14,21 +15,19 @@ require.config({
         },
         jqueryui: {
             deps: ['jquery']
+        },
+        objects: {
+            deps: ['three']
         }
     }
 });
 
-require(['jquery', 'jqueryui', 'world', 'interface'],
-
-        function(jquery, jqueryui, world, interface) {
-
+require(['jquery', 'jqueryui', 'world', 'interface'], function(jquery, jqueryui, world, interface) {
     window.socket = io.connect();
-
-            if (window.document.URL.indexOf("world") >= 0) {
-                world.initialize();
-                world.renderLoop();
-            } else {
-                interface.initialize();
-            }
-        }
-       );
+    if (window.document.URL.indexOf("world") >= 0) {
+        world.initialize();
+        world.renderLoop();
+    } else {
+        interface.initialize();
+    }
+});
