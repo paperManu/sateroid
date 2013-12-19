@@ -25,7 +25,7 @@ define(['audio'], function(){
         //this.carrier.frequency.value = freq;
         this.carrier.connect(this.gain);
 	this.gain.connect(context.destination);
-	this.gain.value = 0.25;
+	this.gain.gain.value = 0.25;
         this.carrier.frequency.cancelScheduledValues(now);
         this.carrier.frequency.setValueAtTime(17000, now);
         this.carrier.frequency.linearRampToValueAtTime(10.0, now + 5.2);
@@ -36,7 +36,7 @@ define(['audio'], function(){
         this.carrier2.type = "sawtooth";
         //this.carrier.frequency.value = freq;
         this.carrier2.connect(this.gain);
-	this.gain2.value = 0.25
+	this.gain2.gain.value = 0.25
         this.carrier2.frequency.cancelScheduledValues(now);
         this.carrier2.frequency.setValueAtTime(3600, now);
         this.carrier2.frequency.exponentialRampToValueAtTime(10.0, now + 10.17);
@@ -44,30 +44,30 @@ define(['audio'], function(){
     }
 
     var Laser = function () {
-
+        var waveform = "triangle";
 	var now = context.currentTime;
         // carrier 1
         this.carrier = context.createOscillator();
 	this.gain = context.createGain();
-        this.carrier.type = "sawtooth";
+        this.carrier.type = waveform;
         //this.carrier.frequency.value = freq;
         this.carrier.connect(this.gain);
-	this.gain.value = 0.025;
+	this.gain.gain.value = 0.25;
         this.carrier.frequency.cancelScheduledValues(now);
         this.carrier.frequency.setValueAtTime(1800, now);
-        this.carrier.frequency.linearRampToValueAtTime(10.0, now + 0.2);
+        this.carrier.frequency.linearRampToValueAtTime(60.0, now + 0.29);
 
 	// carrier 2
 	
 	this.carrier2 = context.createOscillator();
 	this.gain2 = context.createGain();
-        this.carrier2.type = "sawtooth";
+        this.carrier2.type = waveform;
         //this.carrier.frequency.value = freq;
         this.carrier2.connect(this.gain2);
-	this.gain2.value = 0.25;
+	this.gain2.gain.value = 0.25;
         this.carrier2.frequency.cancelScheduledValues(now);
         this.carrier2.frequency.setValueAtTime(1300, now);
-        this.carrier2.frequency.linearRampToValueAtTime(10.0, now + 0.37);
+        this.carrier2.frequency.linearRampToValueAtTime(40.0, now + 0.37);
 	
 	// LP filter
 
@@ -81,11 +81,19 @@ define(['audio'], function(){
 
 	this.hp = context.createBiquadFilter();
 	this.hp.type = 1;
-	this.hp.frequency.value = 380;
+	this.hp.frequency.value = 600;
 	this.lp.connect(this.hp);
-	this.hp.connect(context.destination);
 
 
+        // envelope
+
+        this.adsr = context.createGain();
+        this.hp.connect(this.adsr);
+        this.adsr.connect(context.destination);
+        this.adsr.gain.cancelScheduledValues(now);
+        this.adsr.gain.setValueAtTime(0, now);
+        this.adsr.gain.linearRampToValueAtTime(1, now + 0.02);
+        this.adsr.gain.linearRampToValueAtTime(0, now + 0.39);
         // var now = context.currentTime;
         // // carrier
         // this.carrier = context.createOscillator();
@@ -120,11 +128,10 @@ define(['audio'], function(){
             note = new Laser();
             note.start(0);
         }
-        
     });
-    $(document).keyup(function(e){
-        if (e.keyCode == 17) {
-            note.stop(0);
-        }
-    });
+    // $(document).keyup(function(e){
+    //     if (e.keyCode == 17) {
+    //         note.stop(0);
+    //     }
+    // });
 });
