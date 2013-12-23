@@ -36,8 +36,6 @@ define([], function(){
 		});
 
 
-
-
 		function touchDirection(e) {
 			e.preventDefault();
             var y = e.originalEvent.touches[0].pageY;
@@ -62,8 +60,7 @@ define([], function(){
             // 'touchstart' : pressIn,
             // 'touchend'   : pressOut
         });
-
-
+        console.log($("#direction"));
 	}
 
 
