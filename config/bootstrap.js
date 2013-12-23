@@ -27,7 +27,11 @@ module.exports.bootstrap = function (cb) {
         var ship;
         
 		socket.on("btn", function(nickname, btn, value ) {
-			console.log(nickname, btn, value);
+            if (btn == 'a')
+                if (value == 1)
+                    ship.move(0.000001);
+                else
+                    ship.move(0);
 		});
 
         socket.on("logged", function(nickname) {
@@ -37,8 +41,10 @@ module.exports.bootstrap = function (cb) {
         });
 
 		socket.on("direction", function(nickname, x, y) {
-			console.log(nickname, x, y);
-            ship.rotate(x);
+            if (x == 10)
+                ship.rotate(0);
+            else
+                ship.rotate(x);
 		});
 
 		socket.on("disconnect", function() {

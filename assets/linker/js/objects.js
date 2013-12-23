@@ -36,6 +36,9 @@ function World() {
     /*********/
     this.addSocket = function(socket) {
         sockets.push(socket);
+        for (var i in this.children) {
+            socket.emit("addObject", [this.children[i].type, this.children[i].name]);
+        }
     }
 
     /*********/
@@ -74,8 +77,11 @@ function World() {
     /*********/
     this.update = function() {
         var currentTick = (new Date).valueOf();
-        var delta = currentTick - lastTick;
+        var delta = (currentTick - lastTick) * 0.001;
         lastTick = currentTick;
+
+        for (var i in this.children)
+            this.children[i].update(delta);
     }
 }
 
@@ -88,7 +94,8 @@ function Item() {
 
     this.type = "Item";
     this.direction = new THREE.Vector3(1, 0, 0);
-    this.speed = 0.0;
+    this.speed = new THREE.Vector3(0, 0, 0);
+    this.acceleration = 0.0;
     this.gyro = new THREE.Vector3(0, 0, 0);
     this.life = 1;
 
@@ -102,12 +109,26 @@ function Item() {
 
     /*********/
     this.rotate = function(angle) {
-        this.rotateOnAxis(new THREE.Vector3(1, 0, 0), angle);
-        console.log(this.rotation);
+        this.gyro.set(0, 0, angle);
+    }
+
+    /*********/
+    this.move = function(acceleration) {
+        this.acceleration = acceleration;
     }
 
     /*********/
     this.update = function(delta) {
+        // Update orientation
+        this.rotateOnAxis(new THREE.Vector3(0, 0, 1), this.gyro.z * delta);
+
+        // Update speed according to acceleration
+        var direction = new THREE.Vector3(1, 0, 0);
+        direction.applyAxisAngle(new THREE.Vector3(0, 0, 1), this.rotation.z);
+        this.speed.add(direction.multiplyScalar(this.acceleration * delta));
+
+        // Update position according to speed
+        this.position.add(this.speed);
     }
 }
 
@@ -121,7 +142,7 @@ function Ship() {
     this.type = "Ship";
 
     if (!isInNode) {
-        var geometry = new THREE.CubeGeometry(1, 1, 1);
+        var geometry = new THREE.PlaneGeometry(1, 1, 1);
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         var cube = new THREE.Mesh(geometry, material);
         this.add(cube);
