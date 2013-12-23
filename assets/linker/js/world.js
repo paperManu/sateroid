@@ -1,4 +1,4 @@
-define(['three', 'audio', 'objects'], function(){
+define(['three', 'audioCtl', 'objects'], function(){
 	'use strict';
 
     /*********/

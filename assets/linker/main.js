@@ -5,7 +5,8 @@ require.config({
         jqueryui: '/linker/js/libs/jquery-ui',
         three: '/linker/js/libs/three.min',
         world: '/linker/js/world',
-        audio: "/linker/js/audio",
+        audioCtl: "/linker/js/audioCtl",
+        laser: "/linker/js/audio/laser",
         objects: "/linker/js/objects",
         interface: '/linker/js/interface'
     },
