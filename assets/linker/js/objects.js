@@ -6,6 +6,9 @@ else {
     var isInNode = false;
 }
 
+var SPACE_SIZE = 10;
+var SPACE_VISIBLE = true;
+
 /*************/
 function World() {
     THREE.Object3D.call(this);
@@ -15,6 +18,15 @@ function World() {
     // Private members
     var lastTick = (new Date).valueOf();
     var sockets = [];
+
+    if (SPACE_VISIBLE) {
+        var geometry = new THREE.CircleGeometry(SPACE_SIZE, 64, 0);
+        var material = new THREE.MeshBasicMaterial({color: 0x0000aa});
+        var space = new THREE.Mesh(geometry, material);
+        space.position.z = -1;
+        space.name = "space";
+        this.add(space);
+    }
 
     /*********/
     var computeCollisions = function() {
@@ -80,8 +92,11 @@ function World() {
         var delta = (currentTick - lastTick) * 0.001;
         lastTick = currentTick;
 
-        for (var i in this.children)
+        for (var i in this.children) {
+            if (this.children[i].name == "space")
+                continue;
             this.children[i].update(delta);
+        }
     }
 }
 
@@ -98,6 +113,7 @@ function Item() {
     this.acceleration = 0.0;
     this.gyro = new THREE.Vector3(0, 0, 0);
     this.life = 1;
+    this.maxSpeed = 0.01;
 
     /*********/
     this.accelerate = function(value, direction) {
@@ -127,8 +143,16 @@ function Item() {
         direction.applyAxisAngle(new THREE.Vector3(0, 0, 1), this.rotation.z);
         this.speed.add(direction.multiplyScalar(this.acceleration * delta));
 
+        // Limit the maximum speed
+        if (this.speed.length() > this.maxSpeed)
+            this.speed.setLength(this.maxSpeed);
+
         // Update position according to speed
         this.position.add(this.speed);
+
+        // Check if we went too far, then come back on the other side
+        if (this.position.length() > SPACE_SIZE)
+            this.position.negate();
     }
 }
 
