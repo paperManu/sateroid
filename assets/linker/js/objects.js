@@ -8,6 +8,7 @@ else {
 
 var SPACE_SIZE = 10;
 var SPACE_VISIBLE = true;
+var MAX_ASTEROID = 5;
 
 /*************/
 function World() {
@@ -28,6 +29,8 @@ function World() {
         this.add(space);
     }
 
+    var asteroidNumber = 0;
+
     /*********/
     var computeCollisions = function() {
     }
@@ -39,7 +42,7 @@ function World() {
 
         this.add(object);
         if (isInNode) {
-            for (socket in sockets) {
+            for (var socket in sockets) {
                 sockets[socket].emit("addObject", [object.type, object.name]);
             }
         }
@@ -70,6 +73,22 @@ function World() {
     }
 
     /*********/
+    this.removeObject = function(object) {
+        if (object.type === undefined)
+            return;
+
+        this.remove(object);
+        if (object.type == "Asteroid")
+            asteroidNumber--;
+
+        if (isInNode) {
+            for (var socket in sockets) {
+                sockets[socket].emit("removeObject", [object.type, object.name]);
+            }
+        }
+    }
+
+    /*********/
     this.setState = function(state) {
         if (typeof state != typeof [])
             return;
@@ -78,11 +97,12 @@ function World() {
             for (var i in this.children)
                 if (this.children[i].name == state[item].name)
                     var child = this.children[i];
-            if (child === undefined)
+            if (child === undefined || child.name == "Space")
                 continue;
 
             child.position.set(state[item].position.x, state[item].position.y, state[item].position.z);
             child.rotation.set(state[item].rotation.x, state[item].rotation.y, state[item].rotation.z);
+            child.setVisible();
         }
     }
 
@@ -95,10 +115,23 @@ function World() {
 
         lastTick = currentTick;
 
+        // Update objects in space
         for (var i in this.children) {
             if (this.children[i].name == "Space")
                 continue;
             this.children[i].update(delta);
+            if (this.children[i].life == 0) {
+                this.removeObject(this.children[i]);
+            }
+        }
+
+        // Add randomly an asteroid
+        if (Math.random() > 0.999 && asteroidNumber < MAX_ASTEROID) {
+            var asteroid = new Asteroid();
+            asteroid.name = "Asteroid" + Math.floor(Math.random() * 1e6);
+            asteroid.position.set((Math.random() * 2.0 - 1.0) * SPACE_SIZE / 2.0, (Math.random() * 2.0 - 1.0) * SPACE_SIZE / 2.0, 0);
+            this.addObject(asteroid);
+            asteroidNumber++;
         }
     }
 }
@@ -111,6 +144,7 @@ function Item() {
     THREE.Object3D.call(this);
 
     this.type = "Item";
+    this.infinite = true;
     this.direction = new THREE.Vector3(1, 0, 0);
     this.speed = new THREE.Vector3(0, 0, 0);
     this.acceleration = 0.0;
@@ -137,6 +171,13 @@ function Item() {
     }
 
     /*********/
+    this.setVisible = function() {
+        for (var i in this.children) {
+            this.children[i].visible = true;
+        }
+    }
+
+    /*********/
     this.update = function(delta) {
         //console.log(this.type, this.acceleration, this.speed.length());
         // Update orientation
@@ -156,7 +197,10 @@ function Item() {
 
         // Check if we went too far, then come back on the other side
         if (this.position.length() > SPACE_SIZE)
-            this.position.negate();
+            if (this.infinite)
+                this.position.negate();
+            else
+                this.life = 0;
     }
 }
 
@@ -174,6 +218,7 @@ function Ship() {
         var material = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture('images/ship.png', new THREE.CubeReflectionMapping)});
         material.transparent = true;
         var mesh = new THREE.Mesh(geometry, material);
+        mesh.visible = false;
         this.add(mesh);
     }
 
@@ -195,6 +240,7 @@ function Laser() {
     Item.call(this);
     
     this.type = "Laser";
+    this.infinite = false;
     this.maxSpeed = 0.01;
     this.acceleration = 100;
 
@@ -202,7 +248,7 @@ function Laser() {
         var geometry = new THREE.PlaneGeometry(0.1, 0.1);
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         var mesh = new THREE.Mesh(geometry, material);
-        mesh.position.z = 1;
+        mesh.visible = false;
         this.add(mesh);
     }
 
@@ -220,6 +266,20 @@ function Asteroid() {
     Item.call(this);
 
     this.type = "Asteroid";
+    this.maxSpeed = 0.001;
+    this.gyro.z = (Math.random() * 2.0 - 1.0) * 0.1;
+
+    var direction = new THREE.Vector3(1, 0, 0);
+    direction.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.random() * 2 * Math.PI);
+    this.speed.add(direction.multiplyScalar(Math.random() * this.maxSpeed));
+
+    if (!isInNode) {
+        var geometry = new THREE.PlaneGeometry(2, 1);
+        var material = new THREE.MeshBasicMaterial({color: 0xaa0000});
+        var mesh = new THREE.Mesh(geometry, material);
+        mesh.visible = false;
+        this.add(mesh);
+    }
 }
 
 Asteroid.prototype = Object.create(Item.prototype);

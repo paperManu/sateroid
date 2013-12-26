@@ -27,6 +27,14 @@ define(['three', 'stats', 'audioCtl', 'objects'], function(){
         _world.addObject(instance);
     });
 
+    socket.on("removeObject", function(object) {
+        var name = object[1];
+        var obj = _world.getObjectByName(name);
+        if (obj != undefined) {
+            _world.remove(obj);
+        }
+    });
+
     /*********/
 	function initialize() {
         _stats = new Stats();
