@@ -24,7 +24,7 @@ function World() {
         var material = new THREE.MeshBasicMaterial({color: 0x0000aa});
         var space = new THREE.Mesh(geometry, material);
         space.position.z = -1;
-        space.name = "space";
+        space.name = "Space";
         this.add(space);
     }
 
@@ -93,7 +93,7 @@ function World() {
         lastTick = currentTick;
 
         for (var i in this.children) {
-            if (this.children[i].name == "space")
+            if (this.children[i].name == "Space")
                 continue;
             this.children[i].update(delta);
         }
@@ -135,6 +135,7 @@ function Item() {
 
     /*********/
     this.update = function(delta) {
+        //console.log(this.type, this.acceleration, this.speed.length());
         // Update orientation
         this.rotateOnAxis(new THREE.Vector3(0, 0, 1), this.gyro.z * delta);
 
@@ -166,10 +167,20 @@ function Ship() {
     this.type = "Ship";
 
     if (!isInNode) {
-        var geometry = new THREE.PlaneGeometry(1, 1, 1);
-        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        var cube = new THREE.Mesh(geometry, material);
-        this.add(cube);
+        var geometry = new THREE.PlaneGeometry(1, 1);
+        var material = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture('images/ship.png', new THREE.CubeReflectionMapping)});
+        material.transparent = true;
+        var mesh = new THREE.Mesh(geometry, material);
+        this.add(mesh);
+    }
+
+    /*********/
+    this.fire = function() {
+        var world = this.parent;
+        var laser = new Laser();
+        laser.setDirection(this.rotation, this.position);
+        laser.name = this.name + Math.floor(Math.random() * 1e6);
+        world.addObject(laser);
     }
 }
 
@@ -181,6 +192,21 @@ function Laser() {
     Item.call(this);
     
     this.type = "Laser";
+    this.maxSpeed = 0.001;
+    this.acceleration = 100;
+
+    if (!isInNode) {
+        var geometry = new THREE.PlaneGeometry(0.1, 0.1);
+        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        var mesh = new THREE.Mesh(geometry, material);
+        mesh.position.z = 1;
+        this.add(mesh);
+    }
+
+    this.setDirection = function(direction, position) {
+        this.rotation = direction.clone();
+        this.position = position.clone();
+    }
 }
 
 Laser.prototype = Object.create(Item.prototype);

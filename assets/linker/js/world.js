@@ -7,12 +7,7 @@ define(['three', 'stats', 'audioCtl', 'objects'], function(){
     var _renderer;
 
     // Framerate counter
-    var stats = new Stats();
-    stats.setMode(0);
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0px';
-    stats.domElement.style.top = '0px';
-    document.body.appendChild(stats.domElement);
+    var _stats;
 
     /*********/
     // Socket.io messages
@@ -34,6 +29,13 @@ define(['three', 'stats', 'audioCtl', 'objects'], function(){
 
     /*********/
 	function initialize() {
+        _stats = new Stats();
+        _stats.setMode(0);
+        _stats.domElement.style.position = 'absolute';
+        _stats.domElement.style.left = '0px';
+        _stats.domElement.style.top = '0px';
+        document.body.appendChild(_stats.domElement);
+
 	    console.log("init world");
         _scene = new THREE.Scene();
         _camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -44,11 +46,6 @@ define(['three', 'stats', 'audioCtl', 'objects'], function(){
         _renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(_renderer.domElement);
 
-        //var geometry = new THREE.CubeGeometry(1, 1, 1);
-        //var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        //var cube = new THREE.Mesh(geometry, material);
-        //_scene.add(cube);
-
         _world = new Objects.World();
         _scene.add(_world);
         socket.emit("registerViewer");
@@ -58,12 +55,12 @@ define(['three', 'stats', 'audioCtl', 'objects'], function(){
     function renderLoop() {
         requestAnimationFrame(renderLoop);
 
-        stats.begin();
+        _stats.begin();
         // Get the current state from the server
         socket.emit("update");
         // Render the scene
         _renderer.render(_scene, _camera);
-        stats.end();
+        _stats.end();
     }
 
     /*********/
