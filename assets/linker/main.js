@@ -7,6 +7,8 @@ require.config({
         world: '/linker/js/world',
         audioCtl: "/linker/js/audioCtl",
         laser: "/linker/js/audio/laser",
+        noise: "/linker/js/audio/noise",
+        motor: "/linker/js/audio/motor",
         objects: "/linker/js/objects",
         interface: '/linker/js/interface'
     },
