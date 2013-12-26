@@ -6,7 +6,8 @@ require.config({
         three: '/linker/js/libs/three.min',
         stats: '/linker/js/libs/stats',
         world: '/linker/js/world',
-        audio: "/linker/js/audio",
+        audioCtl: "/linker/js/audioCtl",
+        laser: "/linker/js/audio/laser",
         objects: "/linker/js/objects",
         interface: '/linker/js/interface'
     },
