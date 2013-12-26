@@ -4,6 +4,7 @@ require.config({
         underscore: '/linker/js/libs/underscore-min',
         jqueryui: '/linker/js/libs/jquery-ui',
         three: '/linker/js/libs/three.min',
+        stats: '/linker/js/libs/stats',
         world: '/linker/js/world',
         audioCtl: "/linker/js/audioCtl",
         laser: "/linker/js/audio/laser",
