@@ -29,7 +29,7 @@ module.exports.bootstrap = function (cb) {
 		socket.on("btn", function(nickname, btn, value ) {
             if (btn == 'a')
                 if (value == 1)
-                    ship.move(0.00001);
+                    ship.move(0.001);
                 else
                     ship.move(0);
             else if (btn == 'b')

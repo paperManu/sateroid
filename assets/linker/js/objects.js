@@ -90,6 +90,9 @@ function World() {
     this.update = function() {
         var currentTick = (new Date).valueOf();
         var delta = (currentTick - lastTick) * 0.001;
+        if (delta == 0)
+            return;
+
         lastTick = currentTick;
 
         for (var i in this.children) {
@@ -192,7 +195,7 @@ function Laser() {
     Item.call(this);
     
     this.type = "Laser";
-    this.maxSpeed = 0.001;
+    this.maxSpeed = 0.01;
     this.acceleration = 100;
 
     if (!isInNode) {
