@@ -5,45 +5,133 @@ body, html, .container
 	width: 100%
 	height: 100%
 	-webkit-user-select: none
+	background : black
+	color : #ddd
+	font-family : 'Aldrich', sans-serif
+	font-size : 14px
 
+body
+	border-bottom : 3px solid #be2620
+
+h1, h2, h3
+	font-family : 'Aldrich', sans-serif
+
+h2
+	padding : 20px
+	font-size: 40px
+	text-transform: uppercase
+	text-align: center
 #connexion
 	// display : none
 
+.form-control
+	font-size : 20px
+	padding : 10px
+	height : 45px
 
+
+.btn-primary
+	border-color : #AA201B
+	background-color : #be2620
+
+.btn-lg
+	font-size : 22px
 
 #control
 	display : table
 	height : 100%
 	width : 100%
-	// display : none
+	position : relative
+	display : none
+
+	#info
+		width : 100%
+		height : 29%
+		background : #333
+		position : absolute
+		z-index : 20000
+		display: block
+		border-bottom : solid 1px #be2620
+		#name
+			width : 60%
+			height : 100%
+			border-right : solid 2px #be2620
+			border-left : none
+			border-top : none
+			text-align: center
+			background : rgba(190, 38, 32, 0.6)
+			float : left
+			.val
+				font-size : 30px
+				margin-top : 8%
+
+		#score
+			float: left
+			height: 100%
+			text-align: center
+			width: 40%
+			font-size: 30px
+			margin-top : 2%
 	.part
 		display : table-cell
 		vertical-align: middle
 		text-align: center
 		height : 30px
 		float : inherit
+		position : relative
 
 	#direction
-		+border-radius(10px)
-		background : #333
+		+border-radius(3px)
+		border : 2px solid #be2620
 		display : block
 		position : absolute
-		bottom : 0
-		top : 0
-		right : 0
-		left : 0
-		margin : 20px
+		bottom : 17%
+		margin : -40px 0 0 20px 
+		height : 80px
+		width : 100%
 		-webkit-user-select: none
 	.btn
-		width : 40%
-		height : 40%
+		width : 100px
+		height : 100px
 		+border-radius(5000px)
-		background : #333
+		// background : #999
+		border : 2px solid #be2620
 		// margin : 0 0 0 15px
-		color : #999
+		color : #be2620
 		font-size : 60px
-		font-family: helvetica
+		position : absolute
+		bottom  : 15%
 		-webkit-user-select: none
 		&.active
 			background : #be2620
 			color : white
+
+
+#btnA
+	right : 130px
+
+#btnB
+	right : 20px
+
+
+#alert_orientation
+	font-size : 40px
+	text-align : center
+	padding : 20px
+	margin-top : 100px
+
+
+@media only screen and (orientation:portrait) //landscape
+	.container
+		display : none
+	#alert_orientation
+		display : block
+
+	body
+		border: 3px solid #be2620
+		border-right : none
+		border-left : none
+
+@media only screen and (orientation:landscape) //portrait
+	#alert_orientation
+		display : none

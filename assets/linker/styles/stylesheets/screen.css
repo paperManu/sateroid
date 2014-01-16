@@ -68,56 +68,177 @@ body, html, .container {
   width: 100%;
   height: 100%;
   -webkit-user-select: none;
+  background: black;
+  color: #dddddd;
+  font-family: "Aldrich", sans-serif;
+  font-size: 14px;
 }
 
-/* line 14, ../sass/screen.sass */
+/* line 13, ../sass/screen.sass */
+body {
+  border-bottom: 3px solid #be2620;
+}
+
+/* line 16, ../sass/screen.sass */
+h1, h2, h3 {
+  font-family: "Aldrich", sans-serif;
+}
+
+/* line 19, ../sass/screen.sass */
+h2 {
+  padding: 20px;
+  font-size: 40px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* line 27, ../sass/screen.sass */
+.form-control {
+  font-size: 20px;
+  padding: 10px;
+  height: 45px;
+}
+
+/* line 33, ../sass/screen.sass */
+.btn-primary {
+  border-color: #aa201b;
+  background-color: #be2620;
+}
+
+/* line 37, ../sass/screen.sass */
+.btn-lg {
+  font-size: 22px;
+}
+
+/* line 40, ../sass/screen.sass */
 #control {
   display: table;
   height: 100%;
   width: 100%;
+  position: relative;
+  display: none;
 }
-/* line 19, ../sass/screen.sass */
+/* line 47, ../sass/screen.sass */
+#control #info {
+  width: 100%;
+  height: 29%;
+  background: #333333;
+  position: absolute;
+  z-index: 20000;
+  display: block;
+  border-bottom: solid 1px #be2620;
+}
+/* line 55, ../sass/screen.sass */
+#control #info #name {
+  width: 60%;
+  height: 100%;
+  border-right: solid 2px #be2620;
+  border-left: none;
+  border-top: none;
+  text-align: center;
+  background: rgba(190, 38, 32, 0.6);
+  float: left;
+}
+/* line 64, ../sass/screen.sass */
+#control #info #name .val {
+  font-size: 30px;
+  margin-top: 8%;
+}
+/* line 68, ../sass/screen.sass */
+#control #info #score {
+  float: left;
+  height: 100%;
+  text-align: center;
+  width: 40%;
+  font-size: 30px;
+  margin-top: 2%;
+}
+/* line 75, ../sass/screen.sass */
 #control .part {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
   height: 30px;
   float: inherit;
+  position: relative;
 }
-/* line 26, ../sass/screen.sass */
+/* line 83, ../sass/screen.sass */
 #control #direction {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  border-radius: 10px;
-  background: #333333;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  border: 2px solid #be2620;
   display: block;
   position: absolute;
-  bottom: 0;
-  top: 0;
-  right: 0;
-  left: 0;
-  margin: 20px;
+  bottom: 17%;
+  margin: -40px 0 0 20px;
+  height: 80px;
+  width: 100%;
   -webkit-user-select: none;
 }
-/* line 37, ../sass/screen.sass */
+/* line 93, ../sass/screen.sass */
 #control .btn {
-  width: 40%;
-  height: 40%;
+  width: 100px;
+  height: 100px;
   -webkit-border-radius: 5000px;
   -moz-border-radius: 5000px;
   -ms-border-radius: 5000px;
   -o-border-radius: 5000px;
   border-radius: 5000px;
-  background: #333333;
-  color: #999999;
+  border: 2px solid #be2620;
+  color: #be2620;
   font-size: 60px;
-  font-family: helvetica;
+  position: absolute;
+  bottom: 15%;
   -webkit-user-select: none;
 }
-/* line 47, ../sass/screen.sass */
+/* line 105, ../sass/screen.sass */
 #control .btn.active {
   background: #be2620;
   color: white;
+}
+
+/* line 110, ../sass/screen.sass */
+#btnA {
+  right: 130px;
+}
+
+/* line 113, ../sass/screen.sass */
+#btnB {
+  right: 20px;
+}
+
+/* line 117, ../sass/screen.sass */
+#alert_orientation {
+  font-size: 40px;
+  text-align: center;
+  padding: 20px;
+  margin-top: 100px;
+}
+
+@media only screen and (orientation: portrait) {
+  /* line 125, ../sass/screen.sass */
+  .container {
+    display: none;
+  }
+
+  /* line 127, ../sass/screen.sass */
+  #alert_orientation {
+    display: block;
+  }
+
+  /* line 130, ../sass/screen.sass */
+  body {
+    border: 3px solid #be2620;
+    border-right: none;
+    border-left: none;
+  }
+}
+@media only screen and (orientation: landscape) {
+  /* line 136, ../sass/screen.sass */
+  #alert_orientation {
+    display: none;
+  }
 }

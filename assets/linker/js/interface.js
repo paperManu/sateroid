@@ -17,6 +17,7 @@ define([], function(){
 			    player = data.player;
 			    $("#connexion").remove();
 			    $("#control").css('display', 'table');
+			    $("#name .val").html(player.nickname);
 
                 socket.emit("logged", player.nickname);
 			});
