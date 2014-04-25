@@ -20,16 +20,19 @@ define(['laser', 'noise', 'motor'], function(){
     
    // init();
     console.log("AudioContext: ", context);
-
+    
     $(document).keydown(function(e){
         console.log("Key " + e.keyCode);
         if (e.keyCode == 17) {
+            // Ctrl key
             projectile = new Laser(context);
             projectile.start(0);
         } else if (e.keyCode == 38) {
+            // UP (arrow)
             motor = new Motor(context);
             motor.start(0);
         } else if (e.keyCode == 40) {
+            // DOWN (arrow)
             motor.stop(0);
         }
     });

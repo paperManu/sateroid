@@ -101,6 +101,7 @@ var Laser = function (con) {
 
 
 Laser.prototype.start = function (time) {
+    console.log("Laser fired!");
     this.carrier.start(time);
     this.carrier2.start(time);
     //this.ramp.start(time);
